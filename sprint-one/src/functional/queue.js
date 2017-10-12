@@ -9,24 +9,24 @@ var Queue = function() {
 
   someInstance.enqueue = function(value) {
     storage[count] = value;
-    count++;
+    count ++;
   };
 
   someInstance.dequeue = function() {
-    var output = storage[0];
+    count --;
+    if (count < 0) {
+      count = 0;
+    }
+    var temp = storage[0];
     delete storage[0];
-    count--;
     for (var i = 0; i < count; i++) {
       storage[i] = storage[i + 1];
     }
     delete storage[count];
-    return output;
+    return temp;
   };
 
   someInstance.size = function() {
-    if (count < 0) {
-      count = 0;
-    }
     return count;
   };
 
