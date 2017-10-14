@@ -1,76 +1,114 @@
 var BinarySearchTree = function(value) {
   var newBinarySearchTree = {};
+  newBinarySearchTree.value = value;
+  newBinarySearchTree.left = null;
+  newBinarySearchTree.right = null;
   newBinarySearchTree = _.extend(newBinarySearchTree, binarySearchTreeMethods);
-  this.children = [];
-  this.left = null;
-  this.right = null;
-  this.value = value;
   return newBinarySearchTree;
 };
 
 var binarySearchTreeMethods = {};
 
 binarySearchTreeMethods.insert = function(value) {
-  if (value < this.value) {
-    if (this.left === null) {
-      this.left = BinarySearchTree(value);
-    }
-    if (this.left.left !== null) {
-      if (value < this.left.left.value) {
-        this.left.left = BinarySearchTree(value);
-      }
-    }
-    if (this.left.right !== null) {
-      if (value > this.left.right.value) {
-        this.left.right = BinarySearchTree(value);
-      }
+  var tree = BinarySearchTree(value);
+  var currentTree = this;
+
+  if (tree.value < currentTree.value) {
+    if (currentTree.left === null) {
+      currentTree.left = tree;
+    } else {
+      currentTree.left.insert(value);
     }
   }
-  if (value > this.value) {
-  	if (this.right === null) {
-  	  this.right = BinarySearchTree(value);
-  	}
-  	if (this.right.left !== null) {
-  	  if (value < this.right.left.value) {
-  	  	this.right.left = BinarySearchTree(value);
-  	  }
-  	}    
-  	if (this.right.right !== null) {
-      if (value > this.right.right.value) {
-        this.right.right = BinarySearchTree(value);
-      }
+  if (tree.value > currentTree.value) {
+    if (currentTree.right === null) {
+      currentTree.right = tree;
+    } else {
+      currentTree.right.insert(value);
     }
   }
- //  if (value < this.value) {
- //  	if (this.children[0] === null) {
- //  	  this.left = BinarySearchTree(value);
- //  	  this.children[0] = this.left;
- //  	}
-	// if (this.children[0].children[0] === null) {
-	//   this.children[0].left = BinarySearchTree(value);
-	//   this.children[0].children[0] = this.children[0].left;
-	// }
- //  }
- //  if (value > this.value) {
- //  	if (this.children[1] === null) {
- //  	  this.right = BinarySearchTree(value);
- //  	  this.children[1] = this.right;
- //  	}
- //  	if (this.children[1].children[1] === null) {
-	//   this.children[1].right = BinarySearchTree(value);
-	//   this.children[1].children[1] = this.children[1].right;
-	// }
- //  }
+  
+  // var isInserted = false
+  // while(isInserted === false) {
+  //   if (tree.value < currentTree.value) {
+  //     if (currentTree.left === null) {
+  //       currentTree.left = tree;
+  //       isInserted = true;
+  //     } else {
+  //       currentTree = currentTree.left;
+  //     }
+  //   }
+  //   if (tree.value > currentTree.value) {
+  //     if (currentTree.right === null) {
+  //       currentTree.right = tree;
+  //       isInserted = true;
+  //     } else {
+  //       currentTree = currentTree.right;
+  //     }
+  //   }
+  // }
+
 };
 
 binarySearchTreeMethods.contains = function(value) {
+  var currentTree = this;
+
+  if (value === currentTree.value) {
+  	return true;
+  }
+  if (value < currentTree.value) {
+  	if (currentTree.left !== null) {
+  	  return currentTree.left.contains(value);
+  	} else {
+  	  return false;
+  	}
+  }
+  if (value > currentTree.value) {
+  	if (currentTree.right !== null) {
+      return currentTree.right.contains(value);
+    } else {
+  	  return false;
+  	}
+  }
+
+  // while(currentTree !== null) {
+  //   if (value === currentTree.value) {
+  //     return true;
+  //   }
+  //   if (value < currentTree.value) {
+  //     // if (currentTree.left !== null) {
+  //       currentTree = currentTree.left;
+  //     // } else {
+  //     // 	return false;
+  //     // }
+  //   }
+  //   if (value > currentTree.value) {
+  //     // if (currentTree.right !== null) {
+  //       currentTree = currentTree.right;
+  //     // } else {
+  //     //   return false;
+  //     // }
+  //   }
+  // }
+  // return false;
 
 };
 
-binarySearchTreeMethods.depthFirstLog = function() {
-
+binarySearchTreeMethods.depthFirstLog = function(cb) {
+  var currentTree = this;
+  
+  cb(currentTree.value);
+  if (currentTree.left !== null) {
+    currentTree.left.depthFirstLog(cb);
+  }
+  if (currentTree.right !== null) {
+  	currentTree.right.depthFirstLog(cb);
+  }
 };
 
 /*
  * Complexity: What is the time complexity of the above functions?
+ * insert: O(log(n))
+ * contains: O(log(n))
+ * depthFirstLog: O(n)
  */
